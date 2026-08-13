@@ -28,6 +28,8 @@ export default function App() {
         <StatsPanel />
       </main>
 
+      <AboutPanel />
+
       <footer className="footer">
         FastAPI + PostgreSQL + Redis backend · React + Vite frontend
       </footer>
@@ -192,6 +194,108 @@ function StatsPanel() {
       <p className="api-note">
         API: <code>{API_BASE}</code>
       </p>
+    </section>
+  );
+}
+
+// A showcase panel: click to reveal everything the project is built with and
+// the engineering concepts it demonstrates. Turns the live app into a portfolio
+// piece.
+const GITHUB_URL = "https://github.com/kshitiz235/url-shortner";
+
+const STACK: { group: string; items: string[] }[] = [
+  {
+    group: "Backend",
+    items: ["Python 3.14", "FastAPI", "SQLAlchemy ORM", "PostgreSQL", "Redis", "Pydantic"],
+  },
+  { group: "Frontend", items: ["React", "TypeScript", "Vite"] },
+  {
+    group: "DevOps / Infra",
+    items: ["Docker", "docker-compose", "Nginx", "Railway", "GitHub Actions", "GitHub Pages"],
+  },
+];
+
+const FEATURES: string[] = [
+  "Collision-free base-62 short codes derived from the database id",
+  "Cache-aside redirects served from Redis for a fast read path",
+  "Per-IP rate limiting on link creation (HTTP 429 + Retry-After)",
+  "Click analytics: total clicks, last click, and top referrers",
+  "Asynchronous click logging that never slows the redirect",
+  "Typed REST API with auto-generated OpenAPI docs",
+  "14 automated tests (pytest) running on SQLite for speed",
+];
+
+const CONCEPTS: string[] = [
+  "REST API design & dependency injection",
+  "Relational schema design, indexing & foreign keys",
+  "Caching strategy, TTLs & cache invalidation",
+  "Rate-limiting algorithms (fixed window)",
+  "CORS & the browser same-origin policy",
+  "Containerization & config-over-code deployment",
+];
+
+function AboutPanel() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <section className="about">
+      <button className="about-toggle" onClick={() => setOpen((o) => !o)}>
+        {open ? "▾  Hide details" : "▸  How this was built — tech stack & features"}
+      </button>
+
+      {open && (
+        <div className="about-body">
+          <p className="about-intro">
+            A read-optimized <strong>URL shortener with click analytics</strong>, built full-stack
+            from scratch: a Python API, a real database and cache, a React frontend, and a
+            containerized, cloud-deployed setup.
+          </p>
+
+          <div className="about-flow">
+            Browser → React&nbsp;(GitHub&nbsp;Pages) → FastAPI&nbsp;(Railway) → Redis&nbsp;cache
+            ⇄ PostgreSQL
+          </div>
+
+          <h3>Tech stack</h3>
+          <div className="about-stack">
+            {STACK.map((col) => (
+              <div key={col.group} className="stack-col">
+                <span className="stack-group">{col.group}</span>
+                <div className="chips">
+                  {col.items.map((item) => (
+                    <span key={item} className="chip">
+                      {item}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="about-cols">
+            <div>
+              <h3>Key features</h3>
+              <ul>
+                {FEATURES.map((f) => (
+                  <li key={f}>{f}</li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h3>Engineering concepts</h3>
+              <ul>
+                {CONCEPTS.map((c) => (
+                  <li key={c}>{c}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          <a className="about-github" href={GITHUB_URL} target="_blank" rel="noreferrer">
+            View source on GitHub →
+          </a>
+        </div>
+      )}
     </section>
   );
 }

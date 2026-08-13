@@ -190,6 +190,120 @@ code {
   font-size: 0.85em;
 }
 
+.about {
+  margin-top: 1.25rem;
+}
+
+.about-toggle {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.08);
+  color: #e2e8f0;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  text-align: left;
+  font-size: 0.95rem;
+}
+
+.about-toggle:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.about-body {
+  background: var(--card);
+  border-radius: 14px;
+  padding: 1.5rem;
+  margin-top: 0.75rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+.about-intro {
+  margin-top: 0;
+  color: var(--text);
+}
+
+.about-flow {
+  background: #0f172a;
+  color: #a5b4fc;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  font-size: 0.85rem;
+  font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+  overflow-x: auto;
+  white-space: nowrap;
+  margin-bottom: 1.25rem;
+}
+
+.about-body h3 {
+  font-size: 1rem;
+  margin: 1rem 0 0.5rem;
+}
+
+.about-stack {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+@media (max-width: 640px) {
+  .about-stack {
+    grid-template-columns: 1fr;
+  }
+}
+
+.stack-group {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.4rem;
+}
+
+.chip {
+  background: #eef2ff;
+  color: var(--primary-hover);
+  border: 1px solid #e0e7ff;
+  border-radius: 999px;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.about-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-top: 0.5rem;
+}
+
+@media (max-width: 640px) {
+  .about-cols {
+    grid-template-columns: 1fr;
+  }
+}
+
+.about-body ul {
+  margin: 0.25rem 0;
+  padding-left: 1.1rem;
+}
+
+.about-body li {
+  font-size: 0.88rem;
+  margin-bottom: 0.35rem;
+}
+
+.about-github {
+  display: inline-block;
+  margin-top: 1.25rem;
+  font-weight: 600;
+}
+
 .footer {
   text-align: center;
   color: #c7d2fe;

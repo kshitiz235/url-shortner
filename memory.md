@@ -53,7 +53,22 @@ Design principle: reads vastly outnumber writes, so cache aggressively and never
 - [x] **Milestone 8: Docker & deployment** — code complete, compose validated (`docker compose config` OK). Backend `Dockerfile`, `.dockerignore`, frontend multi-stage `Dockerfile` + `nginx.conf`, `docker-compose.yml` (db+redis+api+web, healthchecks, pgdata volume). Real Redis via REDIS_URL. Docs finalized: README (Docker + deployment guide Routes A/B), interview-notes (24 Qs + résumé bullets), learning-notes M8. PENDING VERIFY: user starts Docker Desktop then `docker compose up --build`.
 
 ## 🎉 PROJECT CORE COMPLETE — all 8 milestones built. 14 tests passing.
-Deployment target: undecided (build-Docker-now chosen). User considering Railway (Route A) vs Supabase+Upstash+Render+GitHub Pages (Route B). Docker is host-agnostic; finalize target when deploying.
+Deployment target: **Route A — Railway (backend+Postgres+Redis) + GitHub Pages (frontend)**. ✅ **LIVE (2026-08-13)**.
+- Frontend: https://kshitiz235.github.io/url-shortner/
+- Backend: https://url-shortner-production-fa1c.up.railway.app (target port fixed to 8080 = Railway's injected PORT)
+- Repo: https://github.com/kshitiz235/url-shortner
+- Verified end-to-end: create link on Pages → stored in Railway Postgres → redirect works. CORS_ORIGINS=https://kshitiz235.github.io.
+- Note: fresh Railway DB → ids restarted at 1, so codes are 1,2,3 (base62 of small ids == decimal; diverges at id 10 → "a"). Optional future tweak: id offset for longer/less-guessable codes.
+
+### Deployment prep DONE (2026-08-13)
+- Git repo initialized at `projects/url-shortener/` (branch `main`), initial commit `4ef9ee8`. git identity: Kshitiz Budhathoki / technicalwarriorscgp@gmail.com. `.env` ignored, `.env.example` tracked.
+- Cloud fixes: `database.py` normalizes postgres://|postgresql:// → postgresql+psycopg:// (`_normalize_db_url`); Dockerfile CMD uses `${PORT:-8000}` (shell form) for Railway; `vite.config.ts` `base: process.env.VITE_BASE || '/'` for Pages sub-path.
+- `.github/workflows/deploy-frontend.yml` builds frontend & deploys to Pages (needs repo Variable `VITE_API_BASE_URL` + Pages source = GitHub Actions).
+### Deployment TODO (user actions)
+1. Create GitHub repo, `git remote add origin` + push.
+2. Railway: deploy backend from repo (Dockerfile auto-detected) + add Postgres + Redis; set backend vars DATABASE_URL=${{Postgres.DATABASE_URL}}, REDIS_URL=${{Redis.REDIS_URL}}, BASE_URL=<backend public URL>, CORS_ORIGINS=<pages URL>. Generate public domain.
+3. GitHub Pages: set repo Variable VITE_API_BASE_URL=<backend URL>, Pages source=GitHub Actions, run workflow.
+4. Set Railway CORS_ORIGINS to the Pages origin, redeploy. Test.
 Possible future work: Alembic migrations (replace create_all), custom domain for BASE_URL, negative-cache/stampede protection, sliding-window rate limit, analytics via queue/stream, user accounts, link expiry/editing.
 
 ## Docker commands
