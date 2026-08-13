@@ -1,0 +1,13 @@
+# Python dependencies for the URL Shortener.
+# Install with:  pip install -r requirements.txt
+
+fastapi           # web framework (routing, validation, docs)
+uvicorn           # ASGI server that runs the FastAPI app
+pydantic          # data validation (pulled in by FastAPI, pinned here for clarity)
+pydantic-settings # typed configuration loaded from environment / .env
+sqlalchemy        # ORM: maps Python objects to database rows
+psycopg[binary]   # PostgreSQL driver (v3) used by SQLAlchemy
+redis             # Redis client (used for the real cache in deployment)
+fakeredis         # in-process Redis stand-in for local dev & tests
+httpx             # HTTP client used by FastAPI's TestClient
+pytest            # test runner

@@ -1,0 +1,11 @@
+# Keep the build context (and image) small and free of secrets.
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+*.sqlite3
+.env
+.git/
+frontend/node_modules/
+frontend/dist/

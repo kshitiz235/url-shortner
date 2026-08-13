@@ -1,0 +1,63 @@
+# One command to run the whole system:  docker compose up --build
+#
+# Services:
+#   db    - PostgreSQL (data persisted in the `pgdata` volume)
+#   redis - real Redis cache (replaces fakeredis)
+#   api   - the FastAPI backend (built from ./Dockerfile)
+#   web   - the React frontend, built and served by Nginx
+#
+# The api waits for db and redis to be healthy before starting.
+
+services:
+  db:
+    image: postgres:18
+    environment:
+      POSTGRES_USER: urlshortener
+      POSTGRES_PASSWORD: devpassword
+      POSTGRES_DB: urlshortener
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U urlshortener"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  api:
+    build: .
+    environment:
+      # Service names (db, redis) resolve to the right containers on the
+      # compose network — no localhost here.
+      DATABASE_URL: postgresql+psycopg://urlshortener:devpassword@db:5432/urlshortener
+      REDIS_URL: redis://redis:6379/0
+      BASE_URL: http://localhost:8000
+      CORS_ORIGINS: http://localhost:8080,http://localhost:5173
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  web:
+    build:
+      context: ./frontend
+      args:
+        # Baked into the frontend bundle at build time.
+        VITE_API_BASE_URL: http://localhost:8000
+    ports:
+      - "8080:80"
+    depends_on:
+      - api
+
+volumes:
+  pgdata:
